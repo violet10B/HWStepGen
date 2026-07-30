@@ -5,6 +5,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 Anything under `src/hwsg/detail/` is private and may change in a minor
 release.
 
+## [Unreleased]
+
+### Added
+
+- `Stepper::checkTimer()` and `Error::TimerConflict`, for detecting another
+  LEDC user taking over a stepper's timer. Such a takeover previously changed
+  the motor's speed with no error anywhere.
+
+### Changed
+
+- LEDC channels are allocated from the highest index down, away from the
+  `analogWrite()` and servo libraries that allocate from 0 up.
+
+### Fixed
+
+- Documentation claimed `SmoothStep` reaches zero jerk at the ends of a ramp.
+  It reaches zero acceleration; only `SmootherStep` reaches zero jerk.
+
 ## [1.0.0] - 2026-07-30
 
 Initial release.

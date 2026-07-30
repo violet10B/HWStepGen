@@ -89,9 +89,23 @@ frequency is exactly reachable. `actualStepFrequencyHz()` and
 
 `analogWrite()`, servo libraries and LED dimmers draw from the same channel
 pool. The library claims channels in `begin()` and releases them in `end()`,
-but cannot see channels claimed by code that bypasses it. To coexist, pin an
-explicit channel with `StepperConfig::ledcChannel` and keep other code away
-from it and from its timer partner (`channel ^ 1`).
+but on core 2.x the Arduino core keeps its own reservations in a file-static
+table with no query API, so neither side can see the other. A third party
+that takes over a stepper's timer changes the motor's speed silently.
+
+Three things reduce the risk, in order of effort:
+
+- Channels are allocated from the highest index down, while `analogWrite()`
+  and the common servo libraries allocate from 0 up. Collisions therefore
+  need the two pools to meet in the middle.
+- `Stepper::checkTimer()` reads the frequency back from the peripheral and
+  reports `Error::TimerConflict` if it no longer matches what was commanded.
+  Call it from a housekeeping task to turn a silent takeover into an error.
+- `StepperConfig::ledcChannel` pins a specific channel. Keep other code off
+  that channel *and* its timer partner (`channel ^ 1`).
+
+Core 3.x registers channels with the core's peripheral manager, so conflicts
+there are usually caught by `begin()` and reported as `Error::BackendFailure`.
 
 ## Build-time overrides
 

@@ -192,6 +192,27 @@ uint8_t Stepper::availableChannels() {
   return detail::StepBackend::availableChannels();
 }
 
+Error Stepper::checkTimer() const {
+  if (!started_) {
+    return Error::NotStarted;
+  }
+  // Stopped means duty 0, and the peripheral reports no frequency for an
+  // idle channel, so there is nothing to compare against.
+  if (requestedHz_ <= 0.0f) {
+    return Error::Ok;
+  }
+
+  float liveHz = 0.0f;
+  if (!backend_.readFrequency(liveHz)) {
+    return Error::BackendFailure;
+  }
+  const float deviation = fabsf(liveHz - actualHz_);
+  if (deviation > actualHz_ * HWSG_FREQUENCY_TOLERANCE) {
+    return Error::TimerConflict;
+  }
+  return Error::Ok;
+}
+
 void Stepper::writeDirection(Direction direction) {
   const bool level =
       (direction == Direction::Forward) != config_.invertDirection;

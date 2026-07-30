@@ -193,8 +193,10 @@ is in the headers under [`src/`](src/).
   `actualStepFrequencyHz()` reports what the hardware produces; requests more
   than 5 % off are rejected.
 - `analogWrite()`, servo libraries and LED dimmers use the same LEDC
-  channels. To coexist, pin a channel with `StepperConfig::ledcChannel` and
-  keep other code off it and its timer partner (`channel ^ 1`).
+  channels, and on core 2.x neither side can see the other's reservations.
+  Channels are allocated top-down to stay clear of them; `checkTimer()`
+  detects a takeover after the fact, and `StepperConfig::ledcChannel` pins a
+  channel explicitly. See [docs/hardware.md](docs/hardware.md).
 
 ## Contributing
 

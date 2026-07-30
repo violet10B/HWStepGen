@@ -48,6 +48,10 @@ class LedcBackend {
   // 0 Hz stops the train. actualHz receives what the hardware settled on.
   Error setFrequency(float hz, float &actualHz);
 
+  // Frequency the timer is producing right now, read back from the
+  // peripheral. False when not attached.
+  bool readFrequency(float &hz) const;
+
   bool isAttached() const { return attached_; }
   int8_t channel() const {
     return attached_ ? static_cast<int8_t>(channel_) : kAutoChannel;

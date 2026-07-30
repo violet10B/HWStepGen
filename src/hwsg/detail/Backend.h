@@ -8,6 +8,7 @@
 //   Error   attach(uint8_t stepPin, int8_t requestedChannel);
 //   void    detach();
 //   Error   setFrequency(float hz, float &actualHz);
+//   bool    readFrequency(float &hz) const;
 //   bool    isAttached() const;
 //   int8_t  channel() const;
 //   static uint8_t availableChannels();

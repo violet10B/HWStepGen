@@ -25,14 +25,18 @@ uint32_t ChannelAllocator::usedTimers_ = 0;
 int8_t ChannelAllocator::acquire() {
   int8_t acquired = -1;
   portENTER_CRITICAL(&g_allocatorMux);
-  for (uint8_t channel = 0; channel < kLedcChannelCount; ++channel) {
+  // Count down: analogWrite() and the common servo libraries take channels
+  // from 0 upwards, and on core 2.x neither side can see the other's
+  // reservations, so starting at the top keeps them out of each other's way.
+  for (int8_t candidate = kLedcChannelCount - 1; candidate >= 0; --candidate) {
+    const uint8_t channel = static_cast<uint8_t>(candidate);
     const uint8_t timer = timerIndexForChannel(channel);
     if ((usedChannels_ & maskFor(channel)) || (usedTimers_ & maskFor(timer))) {
       continue;
     }
     usedChannels_ |= maskFor(channel);
     usedTimers_ |= maskFor(timer);
-    acquired = static_cast<int8_t>(channel);
+    acquired = candidate;
     break;
   }
   portEXIT_CRITICAL(&g_allocatorMux);
@@ -117,6 +121,14 @@ void LedcBackend::detach() {
   ledcRelease(pin_, channel_);
   ChannelAllocator::release(channel_);
   attached_ = false;
+}
+
+bool LedcBackend::readFrequency(float &hz) const {
+  if (!attached_) {
+    return false;
+  }
+  hz = static_cast<float>(ledcCurrentFreq(pin_, channel_));
+  return true;
 }
 
 Error LedcBackend::setFrequency(float hz, float &actualHz) {

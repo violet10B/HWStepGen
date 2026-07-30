@@ -45,6 +45,18 @@ inline uint32_t ledcTone(uint8_t pin, uint8_t channel, uint32_t freqHz) {
 #endif
 }
 
+// Frequency the timer is producing right now, straight from the hardware.
+// Returns 0 when the channel's duty is 0, so only meaningful while running.
+inline uint32_t ledcCurrentFreq(uint8_t pin, uint8_t channel) {
+#if HWSG_ARDUINO_CORE_3
+  (void)channel;
+  return ledcReadFreq(pin);
+#else
+  (void)pin;
+  return ledcReadFreq(channel);
+#endif
+}
+
 // Release the pin from LEDC and park it driven low, so the driver's STEP
 // input never floats.
 inline void ledcRelease(uint8_t pin, uint8_t channel) {

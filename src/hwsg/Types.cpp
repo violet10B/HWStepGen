@@ -34,6 +34,8 @@ const char *toString(Error error) {
       return "BankFull";
     case Error::AlreadyInBank:
       return "AlreadyInBank";
+    case Error::TimerConflict:
+      return "TimerConflict";
   }
   return "Unknown";
 }

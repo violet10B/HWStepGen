@@ -90,6 +90,17 @@ class Stepper {
   /// How many more steppers can be started on this chip.
   static uint8_t availableChannels();
 
+  /// Read the step frequency back from the hardware and compare it with the
+  /// commanded one.
+  ///
+  /// Other LEDC users (analogWrite(), servo and LED libraries) can take over
+  /// the timer this stepper owns, which changes the motor's speed with no
+  /// error anywhere. Calling this occasionally is how that gets noticed.
+  ///
+  /// Returns Ok while stopped or when the frequency still matches,
+  /// NotStarted before begin(), TimerConflict on a mismatch.
+  Error checkTimer() const;
+
  private:
   void writeDirection(Direction direction);
   void sequenceDirectionChange(Direction direction);

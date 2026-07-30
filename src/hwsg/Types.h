@@ -29,6 +29,10 @@ enum class Error : uint8_t {
   BackendFailure,
   BankFull,
   AlreadyInBank,
+  /// The hardware is running at a different frequency than was commanded,
+  /// which means another LEDC user reconfigured this stepper's timer.
+  /// Reported only by Stepper::checkTimer().
+  TimerConflict,
 };
 
 /// Name of the error, for logging. Never null.
