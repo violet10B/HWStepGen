@@ -55,7 +55,7 @@ jobs:
             board: esp32-p4-evboard
             platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v7
         with:
@@ -91,7 +91,7 @@ jobs:
     name: clang-format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Check formatting
         run: |
           find src -type f \( -name '*.h' -o -name '*.cpp' \) -print0 \
@@ -101,7 +101,7 @@ jobs:
     name: Arduino Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: arduino/arduino-lint-action@v3
         with:
           # Not in the Arduino Library Manager index yet; switch to "submit"
