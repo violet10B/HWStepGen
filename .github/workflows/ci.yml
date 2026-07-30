@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Arduino core 2.x - PlatformIO's official platform, frozen at 2.0.17.
+          - name: ESP32 (core 2.x)
+            board: esp32dev
+            platform: espressif32@6.10.0
+          - name: ESP32-S2 (core 2.x)
+            board: esp32-s2-saola-1
+            platform: espressif32@6.10.0
+          - name: ESP32-S3 (core 2.x)
+            board: esp32-s3-devkitc-1
+            platform: espressif32@6.10.0
+          - name: ESP32-C3 (core 2.x)
+            board: esp32-c3-devkitm-1
+            platform: espressif32@6.10.0
+          # Arduino core 3.x - pioarduino community platform. Keep the release
+          # tag in sync with platformio.ini.
+          - name: ESP32 (core 3.x)
+            board: esp32dev
+            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
+          - name: ESP32-S2 (core 3.x)
+            board: esp32-s2-saola-1
+            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
+          - name: ESP32-S3 (core 3.x)
+            board: esp32-s3-devkitc-1
+            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
+          - name: ESP32-C3 (core 3.x)
+            board: esp32-c3-devkitm-1
+            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
+          - name: ESP32-C6
+            board: esp32-c6-devkitc-1
+            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
+          - name: ESP32-H2
+            board: esp32-h2-devkitm-1
+            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
+          - name: ESP32-P4
+            board: esp32-p4-evboard
+            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.platformio
+            ~/.cache/pip
+          key: pio-${{ matrix.board }}-${{ hashFiles('platformio.ini') }}
+          restore-keys: pio-${{ matrix.board }}-
+
+      - name: Install PlatformIO
+        run: pip install --upgrade platformio
+
+      - name: Build examples
+        run: |
+          set -euo pipefail
+          for example in examples/*/; do
+            echo "::group::$(basename "$example")"
+            pio ci "$example" \
+              --board="${{ matrix.board }}" \
+              --project-option="platform=${{ matrix.platform }}" \
+              --project-option="framework=arduino" \
+              --project-option="build_flags=-Wall -Wextra" \
+              --project-option="lib_deps=symlink://$PWD"
+            echo "::endgroup::"
+          done
+
+  format:
+    name: clang-format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check formatting
+        run: |
+          find src -type f \( -name '*.h' -o -name '*.cpp' \) -print0 \
+            | xargs -0 clang-format --dry-run --Werror
+
+  lint:
+    name: Arduino Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: arduino/arduino-lint-action@v1
+        with:
+          # Not in the Arduino Library Manager index yet; switch to "submit"
+          # when applying for inclusion.
+          library-manager: false
+          compliance: strict
+          project-type: library

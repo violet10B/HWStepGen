@@ -1,0 +1,44 @@
+name: Feature request
+description: Suggest something HWStepGen should be able to do
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Note: HWStepGen controls speed, not position. Exact step counts are a
+        peripheral limitation of the LEDC backend; see
+        [docs/architecture.md](https://github.com/violet10B/HWStepGen/blob/main/docs/architecture.md#precise-positioning)
+        before requesting positioning features.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: >
+        Describe the actual application rather than the API you have in mind.
+        It is often solvable another way.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API
+      description: Sketch how you would want to call it.
+      render: cpp
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Fits the project's constraints
+      description: >
+        HWStepGen allocates no memory, throws no exceptions and blocks for no
+        longer than a driver's DIR setup time.
+      options:
+        - label: This can be done without heap allocation
+        - label: This can be done without blocking

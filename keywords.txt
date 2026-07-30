@@ -1,0 +1,98 @@
+#######################################
+# Syntax colouring for HWStepGen (Arduino IDE)
+# KEYWORD1 types, KEYWORD2 functions, LITERAL1 constants
+#######################################
+
+hwsg	KEYWORD1
+Stepper	KEYWORD1
+StepperBank	KEYWORD1
+StepperConfig	KEYWORD1
+Ramp	KEYWORD1
+Error	KEYWORD1
+Direction	KEYWORD1
+EnablePolarity	KEYWORD1
+Easing	KEYWORD1
+
+#######################################
+# Methods and functions
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+setSpeed	KEYWORD2
+setStepFrequency	KEYWORD2
+stop	KEYWORD2
+setDirection	KEYWORD2
+setEnabled	KEYWORD2
+isStarted	KEYWORD2
+isRunning	KEYWORD2
+isEnabled	KEYWORD2
+direction	KEYWORD2
+speedRpm	KEYWORD2
+actualSpeedRpm	KEYWORD2
+stepFrequencyHz	KEYWORD2
+actualStepFrequencyHz	KEYWORD2
+stepsPerRevolution	KEYWORD2
+config	KEYWORD2
+channel	KEYWORD2
+minStepFrequencyHz	KEYWORD2
+maxStepFrequencyHz	KEYWORD2
+minRpm	KEYWORD2
+maxRpm	KEYWORD2
+availableChannels	KEYWORD2
+toString	KEYWORD2
+add	KEYWORD2
+remove	KEYWORD2
+clear	KEYWORD2
+size	KEYWORD2
+empty	KEYWORD2
+at	KEYWORD2
+stopAll	KEYWORD2
+setAllSpeed	KEYWORD2
+setAllDirection	KEYWORD2
+setAllEnabled	KEYWORD2
+anyRunning	KEYWORD2
+attach	KEYWORD2
+detach	KEYWORD2
+isAttached	KEYWORD2
+setAcceleration	KEYWORD2
+acceleration	KEYWORD2
+setEasing	KEYWORD2
+easing	KEYWORD2
+setTargetSpeed	KEYWORD2
+targetSpeed	KEYWORD2
+emergencyStop	KEYWORD2
+update	KEYWORD2
+currentSpeed	KEYWORD2
+isRamping	KEYWORD2
+lastError	KEYWORD2
+ease	KEYWORD2
+
+#######################################
+# Constants
+#######################################
+
+Ok	LITERAL1
+InvalidStepPin	LITERAL1
+InvalidDirPin	LITERAL1
+InvalidEnablePin	LITERAL1
+PinConflict	LITERAL1
+InvalidStepsPerRev	LITERAL1
+InvalidMicrosteps	LITERAL1
+NoFreeChannel	LITERAL1
+AlreadyStarted	LITERAL1
+NotStarted	LITERAL1
+FrequencyOutOfRange	LITERAL1
+BackendFailure	LITERAL1
+BankFull	LITERAL1
+AlreadyInBank	LITERAL1
+Forward	LITERAL1
+Reverse	LITERAL1
+ActiveLow	LITERAL1
+ActiveHigh	LITERAL1
+Linear	LITERAL1
+SmoothStep	LITERAL1
+SmootherStep	LITERAL1
+Sinusoidal	LITERAL1
+kNoPin	LITERAL1
+kAutoChannel	LITERAL1

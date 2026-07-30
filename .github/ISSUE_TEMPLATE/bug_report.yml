@@ -1,0 +1,89 @@
+name: Bug report
+description: Something does not work the way the docs say it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The questions below exist because most stepper
+        problems can only be narrowed down with this information.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you expect, and what did you get instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: chip
+    attributes:
+      label: ESP32 variant
+      options:
+        - ESP32
+        - ESP32-S2
+        - ESP32-S3
+        - ESP32-C3
+        - ESP32-C6
+        - ESP32-H2
+        - ESP32-P4
+        - Other (say which below)
+    validations:
+      required: true
+
+  - type: input
+    id: core-version
+    attributes:
+      label: Arduino core version
+      description: >
+        PlatformIO prints it during the build; the Arduino IDE shows it under
+        Boards Manager > esp32.
+      placeholder: "3.3.11 / 2.0.17"
+    validations:
+      required: true
+
+  - type: input
+    id: hwstepgen-version
+    attributes:
+      label: HWStepGen version
+      placeholder: "1.0.0, or a commit hash"
+    validations:
+      required: true
+
+  - type: input
+    id: driver
+    attributes:
+      label: Stepper driver
+      placeholder: "A4988, DRV8825, TMC2209, TB6600, ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: sketch
+    attributes:
+      label: Minimal sketch
+      description: >
+        The smallest complete sketch that shows the problem. This is by far the
+        most useful thing you can include.
+      render: cpp
+    validations:
+      required: true
+
+  - type: textarea
+    id: errors
+    attributes:
+      label: Error values and serial output
+      description: >
+        If a call returned an hwsg::Error, which one? hwsg::toString() gives
+        the name. Compiler output goes here too.
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Already checked
+      options:
+        - label: The driver's current limit is set and the motor is wired to a common ground
+        - label: The requested speed is inside minRpm() to maxRpm()
+        - label: begin() returned hwsg::Error::Ok

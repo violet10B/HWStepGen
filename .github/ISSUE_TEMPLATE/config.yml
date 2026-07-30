@@ -1,0 +1,10 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or usage help
+    url: https://github.com/violet10B/HWStepGen/discussions
+    about: Ask in Discussions rather than opening an issue.
+  - name: I need exact positioning
+    url: https://github.com/gin66/FastAccelStepper
+    about: >
+      HWStepGen controls speed, not position. FastAccelStepper does
+      hardware-timed positioning with acceleration on the ESP32 today.
