@@ -1,6 +1,8 @@
 # HWStepGen
 
 [![CI](https://github.com/violet10B/HWStepGen/actions/workflows/ci.yml/badge.svg)](https://github.com/violet10B/HWStepGen/actions/workflows/ci.yml)
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/violet10b/library/HWStepGen.svg)](https://registry.platformio.org/libraries/violet10b/HWStepGen)
+[![Version](https://img.shields.io/github/v/tag/violet10B/HWStepGen?label=version&sort=semver)](https://github.com/violet10B/HWStepGen/tags)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Stepper motor speed control for the ESP32 family, with the STEP pulses
@@ -71,7 +73,7 @@ mode, TB6600, etc.
 PlatformIO:
 
 ```ini
-lib_deps = https://github.com/violet10B/HWStepGen.git
+lib_deps = violet10b/HWStepGen@^1.1.0
 ```
 
 Arduino IDE: *Sketch > Include Library > Add .ZIP Library*, or clone into
