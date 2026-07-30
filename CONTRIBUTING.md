@@ -13,14 +13,10 @@ pio run -e esp32dev          # builds examples/BasicSingleMotor
 ```
 
 `platformio.ini` builds one example at a time; change `src_dir` to pick
-another, or build any example on any board directly:
+another, or override it per invocation:
 
 ```bash
-pio ci examples/SpeedRamp \
-  --board=esp32dev \
-  --project-option="platform=espressif32@6.10.0" \
-  --project-option="framework=arduino" \
-  --project-option="lib_deps=symlink://$PWD"
+PLATFORMIO_SRC_DIR=examples/SpeedRamp pio run -e esp32dev
 ```
 
 `pio run` with no arguments builds every environment, matching CI. The core

@@ -17,43 +17,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Environments from platformio.ini, which also pins the platform
+        # versions. Building via the envs (instead of pio ci --board) matters
+        # for the C6/H2/P4: their board IDs only exist inside the pioarduino
+        # platform, and pio ci validates --board against the registry before
+        # the platform is installed.
         include:
-          # Arduino core 2.x - PlatformIO's official platform, frozen at 2.0.17.
-          - name: ESP32 (core 2.x)
-            board: esp32dev
-            platform: espressif32@6.10.0
-          - name: ESP32-S2 (core 2.x)
-            board: esp32-s2-saola-1
-            platform: espressif32@6.10.0
-          - name: ESP32-S3 (core 2.x)
-            board: esp32-s3-devkitc-1
-            platform: espressif32@6.10.0
-          - name: ESP32-C3 (core 2.x)
-            board: esp32-c3-devkitm-1
-            platform: espressif32@6.10.0
-          # Arduino core 3.x - pioarduino community platform. Keep the release
-          # tag in sync with platformio.ini.
-          - name: ESP32 (core 3.x)
-            board: esp32dev
-            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
-          - name: ESP32-S2 (core 3.x)
-            board: esp32-s2-saola-1
-            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
-          - name: ESP32-S3 (core 3.x)
-            board: esp32-s3-devkitc-1
-            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
-          - name: ESP32-C3 (core 3.x)
-            board: esp32-c3-devkitm-1
-            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
-          - name: ESP32-C6
-            board: esp32-c6-devkitc-1
-            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
-          - name: ESP32-H2
-            board: esp32-h2-devkitm-1
-            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
-          - name: ESP32-P4
-            board: esp32-p4-evboard
-            platform: https://github.com/pioarduino/platform-espressif32/releases/download/55.03.311/platform-espressif32.zip
+          - { name: "ESP32 (core 2.x)",    env: esp32dev }
+          - { name: "ESP32-S2 (core 2.x)", env: esp32-s2 }
+          - { name: "ESP32-S3 (core 2.x)", env: esp32-s3 }
+          - { name: "ESP32-C3 (core 2.x)", env: esp32-c3 }
+          - { name: "ESP32 (core 3.x)",    env: esp32dev-core3 }
+          - { name: "ESP32-S2 (core 3.x)", env: esp32-s2-core3 }
+          - { name: "ESP32-S3 (core 3.x)", env: esp32-s3-core3 }
+          - { name: "ESP32-C3 (core 3.x)", env: esp32-c3-core3 }
+          - { name: "ESP32-C6",            env: esp32-c6 }
+          - { name: "ESP32-H2",            env: esp32-h2 }
+          - { name: "ESP32-P4",            env: esp32-p4 }
     steps:
       - uses: actions/checkout@v7
 
@@ -71,8 +51,8 @@ jobs:
             ~/.platformio/packages
             ~/.platformio/platforms
             ~/.cache/pip
-          key: pio-v2-${{ matrix.board }}-${{ hashFiles('platformio.ini') }}
-          restore-keys: pio-v2-${{ matrix.board }}-
+          key: pio-v2-${{ matrix.env }}-${{ hashFiles('platformio.ini') }}
+          restore-keys: pio-v2-${{ matrix.env }}-
 
       - name: Install PlatformIO
         run: pip install --upgrade platformio
@@ -82,12 +62,7 @@ jobs:
           set -euo pipefail
           for example in examples/*/; do
             echo "::group::$(basename "$example")"
-            pio ci "$example" \
-              --board="${{ matrix.board }}" \
-              --project-option="platform=${{ matrix.platform }}" \
-              --project-option="framework=arduino" \
-              --project-option="build_flags=-Wall -Wextra" \
-              --project-option="lib_deps=symlink://$PWD"
+            PLATFORMIO_SRC_DIR="$PWD/$example" pio run -e "${{ matrix.env }}"
             echo "::endgroup::"
           done
 
