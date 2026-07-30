@@ -130,10 +130,12 @@ void loop() {
 }
 ```
 
-Easing curves: `Linear` (trapezoidal), `SmoothStep` and `SmootherStep`
-(S-curves with zero jerk at the ends, good for belt drives), `Sinusoidal`.
-`setAcceleration()` takes the average over the ramp; peak acceleration is
-1.5x for SmoothStep, 1.875x for SmootherStep, pi/2 for Sinusoidal.
+`Linear` is a constant-acceleration trapezoidal profile. `SmoothStep` and
+`Sinusoidal` taper the acceleration to zero at both ends, which is what
+takes most of the ringing out of a belt drive. `SmootherStep` additionally
+reaches zero jerk at the ends, for a higher peak. `setAcceleration()` takes
+the average over the ramp; peak acceleration is 1.5x for SmoothStep, 1.875x
+for SmootherStep and pi/2 for Sinusoidal.
 Reversing through zero is safe — the DIR flip happens at a standstill.
 
 ### Several motors

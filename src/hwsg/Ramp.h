@@ -12,13 +12,16 @@ namespace hwsg {
 /// same time; the value passed to Ramp::setAcceleration() is the average, so
 /// peak acceleration differs per curve.
 enum class Easing : uint8_t {
-  /// Constant acceleration (trapezoidal profile). Peak = 1.0x.
+  /// Constant acceleration (trapezoidal profile), stepping on and off at the
+  /// ends. Peak = 1.0x.
   Linear = 0,
-  /// S-curve 3t^2 - 2t^3, zero jerk at both ends. Peak = 1.5x.
+  /// S-curve 3t^2 - 2t^3. Acceleration reaches zero at both ends, jerk does
+  /// not. Peak = 1.5x.
   SmoothStep,
-  /// S-curve 6t^5 - 15t^4 + 10t^3. Peak = 1.875x.
+  /// S-curve 6t^5 - 15t^4 + 10t^3. Acceleration and jerk both reach zero at
+  /// both ends. Peak = 1.875x.
   SmootherStep,
-  /// Half cosine. Peak = pi/2.
+  /// Half cosine. Same endpoint behaviour as SmoothStep. Peak = pi/2.
   Sinusoidal,
 };
 
