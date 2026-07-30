@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: arduino/arduino-lint-action@v1
+      - uses: arduino/arduino-lint-action@v3
         with:
           # Not in the Arduino Library Manager index yet; switch to "submit"
           # when applying for inclusion.
