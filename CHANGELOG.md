@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 Anything under `src/hwsg/detail/` is private and may change in a minor
 release.
 
-## [Unreleased]
+## [1.1.0] - 2026-07-30
 
 ### Added
 
@@ -22,6 +22,8 @@ release.
 
 - Documentation claimed `SmoothStep` reaches zero jerk at the ends of a ramp.
   It reaches zero acceleration; only `SmootherStep` reaches zero jerk.
+- The published package no longer contains the `idf_component.yml` that
+  builds generate, and now ships `docs/`, which the README links to.
 
 ## [1.0.0] - 2026-07-30
 
@@ -39,4 +41,5 @@ Initial release.
 - Pin validation against the running chip; all failures reported as
   `hwsg::Error` values
 
+[1.1.0]: https://github.com/violet10B/HWStepGen/releases/tag/v1.1.0
 [1.0.0]: https://github.com/violet10B/HWStepGen/releases/tag/v1.0.0
