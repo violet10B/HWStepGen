@@ -24,7 +24,13 @@
       ".github",
       ".pio",
       ".vscode",
-      "docs"
+      ".clang-format",
+      ".editorconfig",
+      ".gitattributes",
+      ".gitignore",
+      "platformio.ini",
+      "CONTRIBUTING.md",
+      "examples/*/idf_component.yml*"
     ]
   },
   "build": {
