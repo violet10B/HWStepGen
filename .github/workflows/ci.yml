@@ -61,14 +61,18 @@ jobs:
         with:
           python-version: '3.x'
 
+      # Cache toolchains and frameworks, but never ~/.platformio/penv: the
+      # pioarduino platform rebuilds it on the fly, and a half-finished
+      # rebuild cached from a failed job breaks every later run.
       - name: Cache PlatformIO
         uses: actions/cache@v6
         with:
           path: |
-            ~/.platformio
+            ~/.platformio/packages
+            ~/.platformio/platforms
             ~/.cache/pip
-          key: pio-${{ matrix.board }}-${{ hashFiles('platformio.ini') }}
-          restore-keys: pio-${{ matrix.board }}-
+          key: pio-v2-${{ matrix.board }}-${{ hashFiles('platformio.ini') }}
+          restore-keys: pio-v2-${{ matrix.board }}-
 
       - name: Install PlatformIO
         run: pip install --upgrade platformio
